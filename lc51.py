@@ -2,10 +2,6 @@ import copy
 from typing import List
 
 class Solution:
-    def printBoard(self, b):
-        for i in range(len(b)):
-            print(b[i])
-
     def putQueue(self, i, j, b):
         n = len(b)
         # cross
@@ -27,49 +23,31 @@ class Solution:
                     j = j+dir[1]
 
         # b[old_i][old_j] = 2
-
-    def isBoardFull(self, b):
-        s = 0
-        for i in range(len(b)):
-           s += sum(b[i])
-        if s == 16:
-            return True
-        else:
-            return False
-
     def solveNQueens(self, n: int) -> List[List[str]]:
         board = [[0 for _ in range(n)] for _ in range(n)]
-        # self.printBoard(board)
-        # self.putQueue(2,2,board)
-        # self.printBoard(board)
 
         result = []
+        result_str = []
         path = []
 
-        def backtracking(n,b):
+        def backtracking(n,b,row_i):
             if len(path) == n:
                 result.append(path[:])
                 return result
 
-            for i in range(n):
-                for j in range(n):
-                    if b[i][j] == 1:
-                        continue
-                    # if not self.judgeBoard(b):
-                    #     continue
-                    if self.isBoardFull(b):
-                        # path.pop()
-                        # b = lastBoard
-                        continue
-                    lastBoard = copy.deepcopy(b)
-                    path.append((i,j))
-                    print(path)
-                    self.putQueue(i,j,b)
-                    backtracking(n,b)
-                    path.pop()
-                    b = lastBoard
+            for j in range(n):
+                if b[row_i][j] == 1:
+                    continue
+                lastBoard = copy.deepcopy(b)
+                default_str = "." * len(b)
+                path.append(default_str[:j] + "Q" + default_str[j+1:])
+                # print(path)
+                self.putQueue(row_i,j,b)
+                backtracking(n,b,row_i+1)
+                path.pop()
+                b = lastBoard
 
-        backtracking(n,board)
+        backtracking(n,board,0)
         return result
 
 so = Solution()
